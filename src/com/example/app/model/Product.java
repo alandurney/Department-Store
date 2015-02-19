@@ -10,6 +10,7 @@ public class Product {
     private double price;
     private double salePrice;
     
+    //new comment
     public Product(int id, int pid, String pn, String d, double pc, double sp){
         this.id = id;
         this.productID = pid;
