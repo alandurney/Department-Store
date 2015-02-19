@@ -23,7 +23,7 @@ public class ProductTableGateway {
     public ProductTableGateway(Connection connection) {
         mConnection = connection;
     }
-        
+    //this is a comment
     public List<Product> getProducts() throws SQLException{
         String query;
         Statement stmt;
