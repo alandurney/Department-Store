@@ -14,6 +14,7 @@ public class ProductTableGateway {
     
     private static final String TABLE_NAME = "products";
     private static final String COLUMN_PRODUCT_ID = "productID";
+    //new comment
     private static final String COLUMN_PROD_NAME = "prodName";
     private static final String COLUMN_DESCRIPTION = "description";
     private static final String COLUMN_PRICE = "price";
