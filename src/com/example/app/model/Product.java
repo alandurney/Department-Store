@@ -3,7 +3,6 @@ package com.example.app.model;
 public class Product {
     
     //making variables that are called into DepartmentStore.java//
-    private int id;
     private int productID;
     private String prodName;
     private String description;
@@ -11,8 +10,7 @@ public class Product {
     private double salePrice;
     
     //new comment
-    public Product(int id, int pid, String pn, String d, double pc, double sp){
-        this.id = id;
+    public Product(int pid, String pn, String d, double pc, double sp){
         this.productID = pid;
         this.prodName = pn;
         this.description = d;
@@ -23,8 +21,8 @@ public class Product {
     
     //GET AND SET METHODS//
     
-    public Product(int pid, String pn, String d, double pc, double sp) {
-        this(-1, pid, pn, d, pc, sp);
+    public Product(String pn, String d, double pc, double sp) {
+        this(-1, pn, d, pc, sp);
     }
     
     public int getProductID() {
