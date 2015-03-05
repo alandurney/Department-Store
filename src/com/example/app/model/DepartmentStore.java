@@ -15,12 +15,16 @@ public class DepartmentStore {
 
         //MENU IS SET IN DO WHILE LOOP SO IT CONTINUES TO RUN UNLESS MANUALLY ENDED BY USER//
         do {
-            System.out.println("Product Information Database");
+            System.out.println("Department Store Database");
             System.out.println("1. Create New Product.");
             System.out.println("2. View Existing Products.");
             System.out.println("3. Update Existing Products.");
             System.out.println("4. Delete Existing Products.");
-            System.out.println("5. Exit.");
+            System.out.println("5. Create New Store.");
+            System.out.println("6. View Existing Stores.");
+            System.out.println("7. Update Existing Stores.");
+            System.out.println("8. Delete Existing Store7s.");
+            System.out.println("9. Exit.");
             System.out.println();
 
             System.out.println("Enter Command:   ");
@@ -34,28 +38,55 @@ public class DepartmentStore {
             switch (input) {
                 case 1: {
                     System.out.println("Creating Product...");
-                    createProduct(keyboard, model);
+                    //createProduct(keyboard, model);
                     System.out.println();
                     break;
                 }
 
                 case 2: {
                     System.out.println("Retrieving Product Information...");
-                    viewProducts(model);
+                    //viewProducts(model);
                     System.out.println();
                     break;
                 }
 
                 case 3: {
                     System.out.println("Updating Product Information...");
-                    editProduct(keyboard, model);
+                    //editProduct(keyboard, model);
                     System.out.println();
                     break;
                 }
 
                 case 4: {
                     System.out.println("Deleting Product Information...");
-                    deleteProduct(keyboard, model);
+                    //deleteProduct(keyboard, model);
+                    System.out.println();
+                    break;
+                    
+                case 5: {
+                    System.out.println("Creating Store...");
+                    createShop(keyboard, model);
+                    System.out.println();
+                    break;
+                }
+
+                case 6: {
+                    System.out.println("Retrieving Store Information...");
+                    viewShops(model);
+                    System.out.println();
+                    break;
+                }
+
+                case 7: {
+                    System.out.println("Updating Store Information...");
+                    editShop(keyboard, model);
+                    System.out.println();
+                    break;
+                }
+
+                case 8: {
+                    System.out.println("Deleting Store Information...");
+                    deleteShop(keyboard, model);
                     System.out.println();
                     break;
 
@@ -63,24 +94,25 @@ public class DepartmentStore {
                 }
             }
         } //WHILE LOOP ENDS APP IF 5 IS SELECTED//
-        while (input != 5);
+        while (input != 9);
         System.out.println("Exiting...");
         System.out.println();
     }
 
     //CREATE METHOD//
-    private static void createProduct(Scanner keyboard, Model model) {
+    /*private static void createProduct(Scanner keyboard, Model model) {
         Product p = readProduct(keyboard);
         if (model.addProduct(p)) {
             System.out.println("Product Added Successfully");
         } else {
             System.out.println("Error. Product Not Added to Database");
         }
-    }
+    }*/
     //END CREATE METHOD
 
+
     //METHOD FOR VIEW PRODUCTS
-    private static void viewProducts(Model mdl) {
+    /*private static void viewProducts(Model mdl) {
         List<Product> products = mdl.getProducts();
 
         if (products.isEmpty()) {
@@ -97,10 +129,10 @@ public class DepartmentStore {
                 );
             }
         }
-    }
+    }*/
     //END VIEW METHOD
 
-    private static Product readProduct(Scanner keyb) {
+    /*private static Product readProduct(Scanner keyb) {
         String prodName, description;
         double price, salePrice;
         String line;
@@ -108,15 +140,15 @@ public class DepartmentStore {
         prodName = getString(keyb, "Enter Product:   ");
         description = getString(keyb, "Enter Product Description:    ");
         line = getString(keyb, "Enter Price:    ");
-        price = Integer.parseInt(line);
+        price = Double.parseDouble(line);
         line = getString(keyb, "Enter Sale Price:    ");
-        salePrice = Integer.parseInt(line);
+        salePrice = Double.parseDouble(line);
         
         return new Product(prodName, description, price, salePrice);
-    }
+    }*/
 
     //METHOD FOR DELETE PRODUCTS    
-    private static void deleteProduct(Scanner keyboard, Model model) {
+    /*private static void deleteProduct(Scanner keyboard, Model model) {
         System.out.print("Enter the product ID of the product to delete:    ");
         int productID = Integer.parseInt(keyboard.nextLine());
         Product p;
@@ -131,11 +163,11 @@ public class DepartmentStore {
         } else {
             System.out.println("Product not found");
         }
-    }
+    }*/
     //END DELETE METHOD
 
 //METHOD FOR EDIT PRODUCTS
-    private static void editProduct(Scanner kb, Model m) {
+    /*private static void editProduct(Scanner kb, Model m) {
         System.out.println("Enter Product ID to edit:    ");
         int productID = Integer.parseInt(kb.nextLine());
         Product p;
@@ -151,10 +183,10 @@ public class DepartmentStore {
         } else {
             System.out.println("Product not Found");
         }
-    }
+    }*/
 //END METHOD FOR EDIT PRODUCT//
     
-    private static void editProductDetails(Scanner keyb, Product p) {
+    /*private static void editProductDetails(Scanner keyb, Product p) {
         String prodName, description;
         double price;
         String line1;
@@ -187,5 +219,57 @@ public class DepartmentStore {
     private static String getString(Scanner keyboard, String prompt) {
         System.out.print(prompt);
         return keyboard.nextLine();
+    }*/
+    
+    
+    
+    
+    ///////////////////////////////////////STORE////////////////////////////////////
+        
+     //CREATE METHOD//
+    /*private static void createShop(Scanner keyboard, Model model) {
+        Shop s = readShop(keyboard);
+        if (model.addShop(s)) {
+            System.out.println("Shop Added Successfully");
+        } else {
+            System.out.println("Error. Shop Not Added to Database");
+        }
+    }*/
+    //END CREATE METHOD
+    
+    //READ METHOD//////
+    private static Shop readShop(Scanner keyb) {
+        String address, manFName, manLName;
+        int phoneNo;
+        String line;
+
+        address = getString(keyb, "Enter address:   ");
+        manFName = getString(keyb, "Enter Manager's First Name:    ");
+        manLName = getString(keyb, "Enter Manager's Last Name:    ");
+        line = getString(keyb, "Enter Phone Number:    ");
+        phoneNo = Integer.parseInt(line);
+        
+        return new Shop(address, manFName, manLName, phoneNo);
     }
+    
+     //METHOD FOR VIEW PRODUCTS
+    private static void viewShops(Model mdl) {
+        List<Shop> shops = mdl.getShops();
+
+        if (shops.isEmpty()) {
+            System.out.println("There are no stores in the database.");
+        } else {
+            System.out.printf("%9s %20s %20s %7s %9s\n", "shopID", "address", "manFName", "manLName", "phoneNo");
+            for (Shop sh : shops) {
+                System.out.printf("%5d %20s %20s %7.2f %9.2s \n",
+                        sh.getShopID(),
+                        sh.getAddress(),
+                        sh.getManFName(),
+                        sh.getManLName(),
+                        sh.getPhoneNo()
+                );
+            }
+        }
+    }
+    //END VIEW METHOD
 }
