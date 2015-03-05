@@ -18,6 +18,7 @@ public class ProductTableGateway {
     private static final String COLUMN_DESCRIPTION = "description";
     private static final String COLUMN_PRICE = "price";
     private static final String COLUMN_SALE_PRICE = "salePrice";
+    private static final String COLUMN_SHOPID = "shopID";
 
     public ProductTableGateway(Connection connection) {
         mConnection = connection;
@@ -33,7 +34,7 @@ public class ProductTableGateway {
 
         //VARIABLES FOR EACH COLUMN
         String prodName, description;
-        int productID;
+        int productID, shopID;
         double price, salePrice;
 
         Product p;
@@ -49,14 +50,15 @@ public class ProductTableGateway {
             description = rs.getString(COLUMN_DESCRIPTION);
             price = rs.getDouble(COLUMN_PRICE);
             salePrice = rs.getDouble(COLUMN_SALE_PRICE);
+            shopID = rs.getInt(COLUMN_SHOPID);
 
-            p = new Product(productID, prodName, description, price, salePrice);
+            p = new Product(productID, prodName, description, price, salePrice, shopID);
             products.add(p);
         }
         return products;
     }
 
-    public int insertProduct(String pn, String d, double pc, double sp) throws SQLException {
+    public int insertProduct(String pn, String d, double pc, double sp, int sid) throws SQLException {
         String query;
         PreparedStatement stmt;
         int numRowsAffected;
@@ -66,14 +68,21 @@ public class ProductTableGateway {
                 + COLUMN_PROD_NAME + ", "
                 + COLUMN_DESCRIPTION + ", "
                 + COLUMN_PRICE + ", "
-                + COLUMN_SALE_PRICE
-                + ") VALUES (?, ?, ?, ?)";
+                + COLUMN_SALE_PRICE + ", "
+                + COLUMN_SHOPID
+                + ") VALUES (?, ?, ?, ?, ?)";
 
         stmt = mConnection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
         stmt.setString(1, pn);
         stmt.setString(2, d);
         stmt.setDouble(3, pc);
         stmt.setDouble(4, sp);
+        if(sid == -1) {
+            stmt.setNull(5, java.sql.Types.INTEGER);
+        }
+        else {
+            stmt.setInt(5, sid);
+        }
 
         numRowsAffected = stmt.executeUpdate();
         if (numRowsAffected == 1) {
@@ -104,12 +113,14 @@ public class ProductTableGateway {
         String query;
         PreparedStatement stmt;
         int numRowsAffected;
+        int sid;
 
         query = "UPDATE " + TABLE_NAME + " SET "
                 + COLUMN_PROD_NAME + "= ?, "
                 + COLUMN_DESCRIPTION + "= ?, "
                 + COLUMN_PRICE + "= ?, "
-                + COLUMN_SALE_PRICE + "= ?"
+                + COLUMN_SALE_PRICE + "= ?, "
+                + COLUMN_SHOPID + "= ?"
                 + " WHERE " + COLUMN_PRODUCT_ID + " = ?";
 
         stmt = mConnection.prepareStatement(query);
@@ -117,7 +128,14 @@ public class ProductTableGateway {
         stmt.setString(2, p.getDescription());
         stmt.setDouble(3, p.getPrice());
         stmt.setDouble(4, p.getSalePrice());
-        stmt.setInt(5, p.getProductID());
+        sid = p.getShopID();
+        if (sid == -1) {
+            stmt.setNull(5, java.sql.Types.INTEGER);
+        }
+        else {
+            stmt.setInt(5, sid);
+        }
+        stmt.setInt(6, p.getProductID());
 
         numRowsAffected = stmt.executeUpdate();
 

@@ -8,21 +8,23 @@ public class Product {
     private String description;
     private double price;
     private double salePrice;
+    private int shopID;
     
     //new comment
-    public Product(int pid, String pn, String d, double pc, double sp){
+    public Product(int pid, String pn, String d, double pc, double sp, int sid){
         this.productID = pid;
         this.prodName = pn;
         this.description = d;
         this.price = pc;
         this.salePrice = sp;
+        this.shopID = sid;
     }
     
     
     //GET AND SET METHODS//
     
-    public Product(String pn, String d, double pc, double sp) {
-        this(-1, pn, d, pc, sp);
+    public Product(String pn, String d, double pc, double sp, int sid) {
+        this(-1, pn, d, pc, sp, sid);
     }
     
     public int getProductID() {
@@ -63,5 +65,13 @@ public class Product {
     
     public void setSalePrice(double salePrice) {
         this.salePrice = salePrice;   
+    }
+    
+    public int getShopID() {
+        return shopID;
+    }
+    
+    public void setShopID(int shopID) {
+        this.shopID = shopID;
     }
 }

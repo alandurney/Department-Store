@@ -16,14 +16,17 @@ public class DepartmentStore {
         //MENU IS SET IN DO WHILE LOOP SO IT CONTINUES TO RUN UNLESS MANUALLY ENDED BY USER//
         do {
             System.out.println("Department Store Database");
+            System.out.println();
             System.out.println("1. Create New Product.");
             System.out.println("2. View Existing Products.");
             System.out.println("3. Update Existing Products.");
             System.out.println("4. Delete Existing Products.");
+            System.out.println();
             System.out.println("5. Create New Store.");
             System.out.println("6. View Existing Stores.");
             System.out.println("7. Update Existing Stores.");
             System.out.println("8. Delete Existing Store7s.");
+            System.out.println();
             System.out.println("9. Exit.");
             System.out.println();
 
@@ -38,31 +41,31 @@ public class DepartmentStore {
             switch (input) {
                 case 1: {
                     System.out.println("Creating Product...");
-                    //createProduct(keyboard, model);
+                    createProduct(keyboard, model);
                     System.out.println();
                     break;
                 }
 
                 case 2: {
                     System.out.println("Retrieving Product Information...");
-                    //viewProducts(model);
+                    viewProducts(model);
                     System.out.println();
                     break;
                 }
 
                 case 3: {
                     System.out.println("Updating Product Information...");
-                    //editProduct(keyboard, model);
+                    editProduct(keyboard, model);
                     System.out.println();
                     break;
                 }
 
                 case 4: {
                     System.out.println("Deleting Product Information...");
-                    //deleteProduct(keyboard, model);
+                    deleteProduct(keyboard, model);
                     System.out.println();
                     break;
-                    
+                }
                 case 5: {
                     System.out.println("Creating Store...");
                     createShop(keyboard, model);
@@ -79,14 +82,14 @@ public class DepartmentStore {
 
                 case 7: {
                     System.out.println("Updating Store Information...");
-                    editShop(keyboard, model);
+                    //editShop(keyboard, model);
                     System.out.println();
                     break;
                 }
 
                 case 8: {
                     System.out.println("Deleting Store Information...");
-                    deleteShop(keyboard, model);
+                    //deleteShop(keyboard, model);
                     System.out.println();
                     break;
 
@@ -100,19 +103,18 @@ public class DepartmentStore {
     }
 
     //CREATE METHOD//
-    /*private static void createProduct(Scanner keyboard, Model model) {
-        Product p = readProduct(keyboard);
+    private static void createProduct(Scanner keyboard, Model model) {
+        Product p = readProduct(keyboard, model);
         if (model.addProduct(p)) {
             System.out.println("Product Added Successfully");
         } else {
             System.out.println("Error. Product Not Added to Database");
         }
-    }*/
+    }
     //END CREATE METHOD
 
-
     //METHOD FOR VIEW PRODUCTS
-    /*private static void viewProducts(Model mdl) {
+    private static void viewProducts(Model mdl) {
         List<Product> products = mdl.getProducts();
 
         if (products.isEmpty()) {
@@ -129,12 +131,13 @@ public class DepartmentStore {
                 );
             }
         }
-    }*/
+    }
     //END VIEW METHOD
 
-    /*private static Product readProduct(Scanner keyb) {
+    private static Product readProduct(Scanner keyb, Model model) {
         String prodName, description;
         double price, salePrice;
+        int shopID;
         String line;
 
         prodName = getString(keyb, "Enter Product:   ");
@@ -143,12 +146,15 @@ public class DepartmentStore {
         price = Double.parseDouble(line);
         line = getString(keyb, "Enter Sale Price:    ");
         salePrice = Double.parseDouble(line);
-        
-        return new Product(prodName, description, price, salePrice);
-    }*/
+        viewShops(model);
+        line = getString(keyb, "Enter Shop Id:    ");
+        shopID = Integer.parseInt(line);
+
+        return new Product(prodName, description, price, salePrice, shopID);
+    }
 
     //METHOD FOR DELETE PRODUCTS    
-    /*private static void deleteProduct(Scanner keyboard, Model model) {
+    private static void deleteProduct(Scanner keyboard, Model model) {
         System.out.print("Enter the product ID of the product to delete:    ");
         int productID = Integer.parseInt(keyboard.nextLine());
         Product p;
@@ -163,18 +169,18 @@ public class DepartmentStore {
         } else {
             System.out.println("Product not found");
         }
-    }*/
+    }
     //END DELETE METHOD
 
 //METHOD FOR EDIT PRODUCTS
-    /*private static void editProduct(Scanner kb, Model m) {
+    private static void editProduct(Scanner kb, Model m) {
         System.out.println("Enter Product ID to edit:    ");
         int productID = Integer.parseInt(kb.nextLine());
         Product p;
 
         p = m.findProductByProductID(productID);
         if (p != null) {
-            editProductDetails(kb, p);
+            editProductDetails(kb, m, p);
             if (m.updateProduct(p)) {
                 System.out.println("Product Updated");
             } else {
@@ -183,20 +189,24 @@ public class DepartmentStore {
         } else {
             System.out.println("Product not Found");
         }
-    }*/
+    }
 //END METHOD FOR EDIT PRODUCT//
-    
-    /*private static void editProductDetails(Scanner keyb, Product p) {
+
+    private static void editProductDetails(Scanner keyb, Model model, Product p) {
         String prodName, description;
         double price;
         String line1;
         double salePrice;
         String line2;
+        int shopID;
+        String line3;
 
         prodName = getString(keyb, "Enter Product Name [" + p.getProdName() + "]:");
         description = getString(keyb, "Enter Product Description [" + p.getDescription() + "]:");
         line1 = getString(keyb, "Enter Product Price [" + p.getPrice() + "]:");
         line2 = getString(keyb, "Enter Product Sale Price [" + p.getSalePrice() + "]:");
+        viewShops(model);
+        line3 = getString(keyb, "Enter Shop ID [" + p.getShopID() + "]:");
 
         if (prodName.length() != 0) {
             p.setProdName(prodName);
@@ -214,29 +224,30 @@ public class DepartmentStore {
             salePrice = Double.parseDouble(line2);
             p.setSalePrice(salePrice);
         }
+        
+        if (line3.length() != 0) {
+            shopID = Integer.parseInt(line3);
+            p.setShopID(shopID);
+        }
     }
-    
+
     private static String getString(Scanner keyboard, String prompt) {
         System.out.print(prompt);
         return keyboard.nextLine();
-    }*/
-    
-    
-    
-    
+    }
+
     ///////////////////////////////////////STORE////////////////////////////////////
-        
-     //CREATE METHOD//
-    /*private static void createShop(Scanner keyboard, Model model) {
+    //CREATE METHOD//
+    private static void createShop(Scanner keyboard, Model model) {
         Shop s = readShop(keyboard);
         if (model.addShop(s)) {
             System.out.println("Shop Added Successfully");
         } else {
             System.out.println("Error. Shop Not Added to Database");
         }
-    }*/
+    }
     //END CREATE METHOD
-    
+
     //READ METHOD//////
     private static Shop readShop(Scanner keyb) {
         String address, manFName, manLName;
@@ -248,20 +259,20 @@ public class DepartmentStore {
         manLName = getString(keyb, "Enter Manager's Last Name:    ");
         line = getString(keyb, "Enter Phone Number:    ");
         phoneNo = Integer.parseInt(line);
-        
+
         return new Shop(address, manFName, manLName, phoneNo);
     }
-    
-     //METHOD FOR VIEW PRODUCTS
+
+    //METHOD FOR VIEW PRODUCTS
     private static void viewShops(Model mdl) {
         List<Shop> shops = mdl.getShops();
 
         if (shops.isEmpty()) {
             System.out.println("There are no stores in the database.");
         } else {
-            System.out.printf("%9s %20s %20s %7s %9s\n", "shopID", "address", "manFName", "manLName", "phoneNo");
+            System.out.printf("%6s %20s %20s %20s %9s\n", "shopID", "address", "manFName", "manLName", "phoneNo");
             for (Shop sh : shops) {
-                System.out.printf("%5d %20s %20s %7.2f %9.2s \n",
+                System.out.printf("%6d %20s %20s %20s %9s \n",
                         sh.getShopID(),
                         sh.getAddress(),
                         sh.getManFName(),

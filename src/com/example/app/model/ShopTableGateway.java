@@ -12,8 +12,8 @@ public class ShopTableGateway {
 
     private final Connection mConnection;
 
-    private static final String TABLE_NAME = "Shops";
-    private static final String COLUMN_SHOPID = "shopID";
+    private static final String TABLE_NAME = "Shop";
+    private static final String COLUMN_SHOPID = "storeID";
     private static final String COLUMN_ADDRESS = "address";
     private static final String COLUMN_MANFNAME = "manFNAme";
     private static final String COLUMN_MANLNAME = "manLName";
@@ -30,13 +30,13 @@ public class ShopTableGateway {
         int id = -1;
 
         // the required SQL INSERT statement with place holders for the values to be inserted into the database
-        query = "INSERT INTO " + TABLE_NAME + " (" +
-                COLUMN_SHOPID + ", " +
-                COLUMN_ADDRESS + ", " +
-                COLUMN_MANFNAME + ", " +
-                COLUMN_MANLNAME + ", " +
-                COLUMN_PHONENO +
-                ") VALUES (?, ?, ?, ?, ?)";
+        query = "INSERT INTO " + TABLE_NAME + " ("
+                + COLUMN_SHOPID + ", "
+                + COLUMN_ADDRESS + ", "
+                + COLUMN_MANFNAME + ", "
+                + COLUMN_MANLNAME + ", "
+                + COLUMN_PHONENO
+                + ") VALUES (?, ?, ?, ?, ?)";
 
         // create a PreparedStatement object to execute the query and insert the values into the query
         stmt = mConnection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
@@ -59,7 +59,7 @@ public class ShopTableGateway {
         return id;
     }
 
-    public boolean deleteStore(int id) throws SQLException {
+    public boolean deleteShop(int id) throws SQLException {
         String query;                   // the SQL query to execute
         PreparedStatement stmt;         // the java.sql.PreparedStatement object used to execute the SQL query
         int numRowsAffected;
@@ -83,10 +83,10 @@ public class ShopTableGateway {
         Statement stmt;                 // the java.sql.Statement object used to execute the SQL query
         ResultSet rs;                   // the java.sql.ResultSet representing the result of SQL query
         List<Shop> shops;         // the java.util.List containing the Manager objects created for each row
-                                        // in the result of the query the id of a manager
+        // in the result of the query the id of a manager
 
-        String address, manFName, manLName, phoneNo;
-        int id;
+        String address, manFName, manLName;
+        int shopID, phoneNo;
         Shop s;                   // a Manager object created from a row in the result of the query
 
         // execute an SQL SELECT statement to get a java.util.ResultSet representing
@@ -120,12 +120,12 @@ public class ShopTableGateway {
         int numRowsAffected;
 
         // the required SQL INSERT statement with place holders for the values to be inserted into the database
-        query = "UPDATE " + TABLE_NAME + " SET " +
-                COLUMN_ADDRESS      + " = ?, " +
-                COLUMN_MANFNAME    + " = ?, " +
-                COLUMN_MANLNAME + " = ? " +
-                COLUMN_PHONENO + " = ? " +                
-                " WHERE " + COLUMN_SHOPID + " = ?";
+        query = "UPDATE " + TABLE_NAME + " SET "
+                + COLUMN_ADDRESS + " = ?, "
+                + COLUMN_MANFNAME + " = ?, "
+                + COLUMN_MANLNAME + " = ? "
+                + COLUMN_PHONENO + " = ? "
+                + " WHERE " + COLUMN_SHOPID + " = ?";
 
         // create a PreparedStatement object to execute the query and insert the new values into the query
         stmt = mConnection.prepareStatement(query);

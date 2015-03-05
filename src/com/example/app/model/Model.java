@@ -18,14 +18,21 @@ public class Model {
     }
 
     List<Product> products;
-    ProductTableGateway gateway;
+    ProductTableGateway productsGateway;
+
+    List<Shop> shops;
+    ShopTableGateway shopsGateway;
 
     private Model() {
         try {
             Connection conn = DBConnection.getInstance();
-            this.gateway = new ProductTableGateway(conn);
+            this.productsGateway = new ProductTableGateway(conn);
 
-            this.products = this.gateway.getProducts();
+            this.products = this.productsGateway.getProducts();
+
+            this.shopsGateway = new ShopTableGateway(conn);
+            this.shops = this.shopsGateway.getShops();
+
         } catch (SQLException ex) {
             Logger.getLogger(Model.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
@@ -41,7 +48,7 @@ public class Model {
     public boolean addProduct(Product p) {
         boolean result = false;
         try {
-            int id = this.gateway.insertProduct(p.getProdName(), p.getDescription(), p.getPrice(), p.getSalePrice());
+            int id = this.productsGateway.insertProduct(p.getProdName(), p.getDescription(), p.getPrice(), p.getSalePrice(), p.getShopID());
             if (id != -1) {
                 p.setProductID(id);
                 this.products.add(p);
@@ -58,7 +65,7 @@ public class Model {
         boolean removed = false;
 
         try {
-            removed = this.gateway.deleteProduct(p.getProductID());
+            removed = this.productsGateway.deleteProduct(p.getProductID());
             if (removed) {
                 removed = this.products.remove(p);
             }
@@ -68,36 +75,55 @@ public class Model {
         return removed;
     }
 
-    Product findProductByProductID(int productID){
+    Product findProductByProductID(int productID) {
         Product p = null;
         int i = 0;
         boolean found = false;
         while (i < this.products.size() && !found) {
             p = this.products.get(i);
-            if(p.getProductID() == productID) {
+            if (p.getProductID() == productID) {
                 found = true;
-            }else {
+            } else {
                 i++;
             }
         }
-        if(!found){
+        if (!found) {
             p = null;
         }
         return p;
-    }    
+    }
 
 //UPDATE
-    boolean updateProduct(Product p){
+    boolean updateProduct(Product p) {
         boolean updated = false;
-        
-        try{
-            updated = this.gateway.updateProduct(p);
-        
 
-}
-        catch(SQLException ex) {
+        try {
+            updated = this.productsGateway.updateProduct(p);
+
+        } catch (SQLException ex) {
             Logger.getLogger(Model.class.getName()).log(Level.SEVERE, null, ex);
         }
         return updated;
+    }
+
+    ////////////////////////////STORE METHODS///////////////////////////////////
+    public List<Shop> getShops() {
+        return this.shops;
+    }
+    
+    //ADD
+    public boolean addShop(Shop s) {
+        boolean result = false;
+        try {
+            int id = this.shopsGateway.insertShop(s.getAddress(), s.getManFName(), s.getManLName(), s.getPhoneNo());
+            if (id != -1) {
+                s.setShopID(id);
+                this.shops.add(s);
+                result = true;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Model.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return result;
+    }
 }
