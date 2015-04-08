@@ -14,7 +14,7 @@ public class ShopTableGateway {
 
     private static final String TABLE_NAME = "Shop";
     private static final String COLUMN_STOREID = "storeID";
-    private static final String COLUMN_ADDRESS = "address";
+    private static final String COLUMN_SHOPNAME = "shopName";
     private static final String COLUMN_MANFNAME = "manFNAme";
     private static final String COLUMN_MANLNAME = "manLName";
     private static final String COLUMN_PHONENO = "phoneNo";
@@ -23,7 +23,7 @@ public class ShopTableGateway {
         mConnection = connection;
     }
 
-    public int insertShop(String a, String mf, String ml, int pn) throws SQLException {
+    public int insertShop(String sn, String mf, String ml, int pn) throws SQLException {
         String query;                   // the SQL query to execute
         PreparedStatement stmt;         // the java.sql.PreparedStatement object used to execute the SQL query
         int numRowsAffected;
@@ -32,7 +32,7 @@ public class ShopTableGateway {
         // the required SQL INSERT statement with place holders for the values to be inserted into the database
         query = "INSERT INTO " + TABLE_NAME + " ("
                 + COLUMN_STOREID + ", "
-                + COLUMN_ADDRESS + ", "
+                + COLUMN_SHOPNAME + ", "
                 + COLUMN_MANFNAME + ", "
                 + COLUMN_MANLNAME + ", "
                 + COLUMN_PHONENO
@@ -40,7 +40,7 @@ public class ShopTableGateway {
 
         // create a PreparedStatement object to execute the query and insert the values into the query
         stmt = mConnection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-        stmt.setString(1, a);
+        stmt.setString(1, sn);
         stmt.setString(2, mf);
         stmt.setString(3, ml);
         stmt.setInt(4, pn);
@@ -77,6 +77,9 @@ public class ShopTableGateway {
         // return the true if one and only one row was deleted from the database
         return (numRowsAffected == 1);
     }
+    
+    
+    
 
     public List<Shop> getShops() throws SQLException {
         String query;                   // the SQL query to execute
@@ -85,7 +88,8 @@ public class ShopTableGateway {
         List<Shop> shops;         // the java.util.List containing the Manager objects created for each row
         // in the result of the query the id of a manager
 
-        String address, manFName, manLName;
+        ///NOTE: SETTING THE VARIABLES OF THE DATA TYPES//
+        String shopName, manFName, manLName;
         int storeID, phoneNo;
         Shop s;                   // a Manager object created from a row in the result of the query
 
@@ -101,12 +105,12 @@ public class ShopTableGateway {
         shops = new ArrayList<Shop>();
         while (rs.next()) {
             storeID = rs.getInt(COLUMN_STOREID);
-            address = rs.getString(COLUMN_ADDRESS);
+            shopName = rs.getString(COLUMN_SHOPNAME);
             manFName = rs.getString(COLUMN_MANFNAME);
             manLName = rs.getString(COLUMN_MANLNAME);
             phoneNo = rs.getInt(COLUMN_PHONENO);
 
-            s = new Shop(storeID, address, manFName, manLName, phoneNo);
+            s = new Shop(storeID, shopName, manFName, manLName, phoneNo);
             shops.add(s);
         }
 
@@ -121,7 +125,7 @@ public class ShopTableGateway {
 
         // the required SQL INSERT statement with place holders for the values to be inserted into the database
         query = "UPDATE " + TABLE_NAME + " SET "
-                + COLUMN_ADDRESS + " = ?, "
+                + COLUMN_SHOPNAME + " = ?, "
                 + COLUMN_MANFNAME + " = ?, "
                 + COLUMN_MANLNAME + " = ? "
                 + COLUMN_PHONENO + " = ? "
@@ -129,7 +133,7 @@ public class ShopTableGateway {
 
         // create a PreparedStatement object to execute the query and insert the new values into the query
         stmt = mConnection.prepareStatement(query);
-        stmt.setString(1, s.getAddress());
+        stmt.setString(1, s.getShopName());
         stmt.setString(2, s.getManFName());
         stmt.setString(3, s.getManLName());
         stmt.setInt(5, s.getPhoneNo());

@@ -18,7 +18,7 @@ public class ProductTableGateway {
     private static final String COLUMN_DESCRIPTION = "description";
     private static final String COLUMN_PRICE = "price";
     private static final String COLUMN_SALE_PRICE = "salePrice";
-    private static final String COLUMN_SHOPID = "shopID";
+    private static final String COLUMN_STOREID = "storeID";
 
     public ProductTableGateway(Connection connection) {
         mConnection = connection;
@@ -34,11 +34,12 @@ public class ProductTableGateway {
 
         //VARIABLES FOR EACH COLUMN
         String prodName, description;
-        int productID, shopID;
+        int productID, storeID;
         double price, salePrice;
 
         Product p;
-
+        
+        //sql query to retrieve all from the product table
         query = "SELECT * FROM " + TABLE_NAME;
         stmt = this.mConnection.createStatement();
         rs = stmt.executeQuery(query);
@@ -50,9 +51,9 @@ public class ProductTableGateway {
             description = rs.getString(COLUMN_DESCRIPTION);
             price = rs.getDouble(COLUMN_PRICE);
             salePrice = rs.getDouble(COLUMN_SALE_PRICE);
-            shopID = rs.getInt(COLUMN_SHOPID);
+            storeID = rs.getInt(COLUMN_STOREID);
 
-            p = new Product(productID, prodName, description, price, salePrice, shopID);
+            p = new Product(productID, prodName, description, price, salePrice, storeID);
             products.add(p);
         }
         return products;
@@ -69,7 +70,7 @@ public class ProductTableGateway {
                 + COLUMN_DESCRIPTION + ", "
                 + COLUMN_PRICE + ", "
                 + COLUMN_SALE_PRICE + ", "
-                + COLUMN_SHOPID
+                + COLUMN_STOREID
                 + ") VALUES (?, ?, ?, ?, ?)";
 
         stmt = mConnection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
@@ -77,9 +78,11 @@ public class ProductTableGateway {
         stmt.setString(2, d);
         stmt.setDouble(3, pc);
         stmt.setDouble(4, sp);
+        //this sets the id to null if there is none. in this case it should not require an input//
         if(sid == -1) {
             stmt.setNull(5, java.sql.Types.INTEGER);
         }
+        //this retrieves existing ids and adds one to this to make a new id//
         else {
             stmt.setInt(5, sid);
         }
@@ -120,7 +123,7 @@ public class ProductTableGateway {
                 + COLUMN_DESCRIPTION + "= ?, "
                 + COLUMN_PRICE + "= ?, "
                 + COLUMN_SALE_PRICE + "= ?, "
-                + COLUMN_SHOPID + "= ?"
+                + COLUMN_STOREID + "= ?"
                 + " WHERE " + COLUMN_PRODUCT_ID + " = ?";
 
         stmt = mConnection.prepareStatement(query);
@@ -128,7 +131,7 @@ public class ProductTableGateway {
         stmt.setString(2, p.getDescription());
         stmt.setDouble(3, p.getPrice());
         stmt.setDouble(4, p.getSalePrice());
-        sid = p.getShopID();
+        sid = p.getStoreID();
         if (sid == -1) {
             stmt.setNull(5, java.sql.Types.INTEGER);
         }
@@ -141,5 +144,6 @@ public class ProductTableGateway {
 
         return (numRowsAffected == 1);
     }
+    
 
 }

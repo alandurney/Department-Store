@@ -8,7 +8,7 @@ public class Product {
     private String description;
     private double price;
     private double salePrice;
-    private int shopID;
+    private int storeID;
     
     //new comment
     public Product(int pid, String pn, String d, double pc, double sp, int sid){
@@ -17,7 +17,7 @@ public class Product {
         this.description = d;
         this.price = pc;
         this.salePrice = sp;
-        this.shopID = sid;
+        this.storeID = sid;
     }
     
     
@@ -67,11 +67,11 @@ public class Product {
         this.salePrice = salePrice;   
     }
     
-    public int getShopID() {
-        return shopID;
+    public int getStoreID() {
+        return storeID;
     }
     
-    public void setShopID(int shopID) {
-        this.shopID = shopID;
+    public void setStoreID(int storeID) {
+        this.storeID = storeID;
     }
 }
