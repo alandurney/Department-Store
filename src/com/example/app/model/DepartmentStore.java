@@ -1,35 +1,48 @@
 package com.example.app.model;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
 
 public class DepartmentStore {
+
+    //note: this is for the ordering part on the stores section. they order by ids.
+    //NOTE:NAME_ORDER IS FOR BOTH SHOPS AND PRODUCTS
+    private static final int NAME_ORDER = 1;
+    private static final int PRICE_ORDER = 1;
 
     //MENU + KEYBOARD INPUT//
     public static void main(String[] args) {
         Scanner keyboard = new Scanner(System.in);
         Model model;
         Product p;
-        int input=9;//input variable NOTE: try making into a string input//
+        int input = 12;//input variable NOTE: try making into a string input//
 
         //MENU IS SET IN DO WHILE LOOP SO IT CONTINUES TO RUN UNLESS MANUALLY ENDED BY USER//
         do {
             //try loop is for the exception handling of connection errors.
             try {
                 model = Model.getInstance();
+                System.out.println("The New You");
                 System.out.println("Department Store Database");
                 System.out.println();
                 System.out.println("1. Create New Product.");
                 System.out.println("2. View Existing Products.");
                 System.out.println("3. Update Existing Products.");
                 System.out.println("4. Delete Existing Products.");
+                System.out.println("5. View Product Details.");
+                //NOTE: THIS OPTION LETS THE USER SEE THE STORE NAMES OF A PRODUCT//
+                System.out.println("6. View Products in Stores.");
                 System.out.println();
-                System.out.println("5. Create New Store.");
-                System.out.println("6. View Existing Stores.");
-                System.out.println("7. Update Existing Stores.");
-                System.out.println("8. Delete Existing Stores.");
+                System.out.println("7. Create New Store.");
+                //note: 8. used the order alphabetically here.
+                System.out.println("8. View Existing Stores.");
+                System.out.println("9. Update Existing Stores.");
+                System.out.println("10. Delete Existing Stores.");
+                System.out.println("11. View Store Details.");
                 System.out.println();
-                System.out.println("9. Exit.");
+                System.out.println("12. Exit.");
                 System.out.println();
 
                 //System.out.println("Enter Command:   ");
@@ -45,7 +58,7 @@ public class DepartmentStore {
                 //note: input is linked to operation by its name//
                 switch (input) {
                     case 1: {
-                        System.out.println("Creating Product...");
+                        System.out.println("Creating New Product...");
                         createProduct(keyboard, model);
                         System.out.println();
                         break;
@@ -53,7 +66,7 @@ public class DepartmentStore {
 
                     case 2: {
                         System.out.println("Retrieving Product Information...");
-                        viewProducts(model);
+                        viewProducts(model, PRICE_ORDER);
                         System.out.println();
                         break;
                     }
@@ -71,47 +84,75 @@ public class DepartmentStore {
                         System.out.println();
                         break;
                     }
+                    //this is for the view single product option. not it uses a model called viewPRODUCT not the same as viewPRODUCTS for option 2//
                     case 5: {
+                        System.out.println("Retriving Product...");
+                        ViewProduct(keyboard, model);
+                        System.out.println();
+                        break;
+                    }
+
+                    //this is for the view stores under products option. i.e MY EXAMPLE of understanding how the 1:m table works.
+                    case 6: {
+                        System.out.println("Retriving Information...");
+                        StoreProd(keyboard, model);
+                        System.out.println();
+                        break;
+                    }
+
+                    /////////STORES////////////
+                    case 7: {
                         System.out.println("Creating Store...");
                         createShop(keyboard, model);
                         System.out.println();
                         break;
                     }
 
-                    case 6: {
-                        System.out.println("Retrieving Store Information...");
-                        viewShops(model);
-                        System.out.println();
-                        break;
-                    }
-
-                    case 7: {
-                        System.out.println("Updating Store Information...");
-                        //editShop(keyboard, model);
-                        System.out.println();
-                        break;
-                    }
-
                     case 8: {
-                        System.out.println("Deleting Store Information...");
-                        //deleteShop(keyboard, model);
+                        System.out.println("Retrieving Store Information...");
+                        viewShops(model, NAME_ORDER);
                         System.out.println();
                         break;
-
-                        //NOTE: try creating option for other iputs that are not in the loop//
                     }
+
+                    case 9: {
+                        System.out.println("Updating Store Information...");
+                        editShop(keyboard, model);
+                        System.out.println();
+                        break;
+                    }
+
+                    case 10: {
+                        System.out.println("Deleting Store Information...");
+                        deleteShop(keyboard, model);
+                        System.out.println();
+                        break;
+                    }
+                    //this is for the view single store option.
+                    case 11: {
+                        System.out.println("Retriving Store...");
+                        ViewShop(keyboard, model);
+                        System.out.println();
+                        break;
+                    }
+                    //this is for the view single store by id order option.
+                    //case 12: {
+                    //System.out.println("Retriving Store information...");
+                    //ViewShop(keyboard, model);
+                    //System.out.println();
+                    //break;
+                    //}
                 }
-                }
-                //this is for the exception catching connected to the model class
-                catch(DataAccessException e){
-                    System.out.println();
-                    System.out.println(e.getMessage());
-                    System.out.println();
-                }
-            
+            } //this is for the exception catching connected to the model class
+            catch (DataAccessException e) {
+                System.out.println();
+                System.out.println(e.getMessage());
+                System.out.println();
+            }
+
         } //WHILE LOOP ENDS APP IF 9 IS SELECTED//
-        while (input != 9);
-        System.out.println("Exiting...");
+        while (input != 12);
+        System.out.println("Goodbye...");
         System.out.println();
     }
 
@@ -127,27 +168,48 @@ public class DepartmentStore {
     //END CREATE METHOD
 
     //METHOD FOR VIEW PRODUCTS
-    private static void viewProducts(Model mdl) {
+    private static void viewProducts(Model mdl, int order) {
         //list for stored info in the getproducts model in prodtablegateway
         List<Product> products = mdl.getProducts();
 
         if (products.isEmpty()) {
             System.out.println("There are no products in the database.");
         } else {
-            System.out.printf("%9s %20s %20s %7s %9s %20\n", "productID", "productName", "description", "price", "salePrice");
-            for (Product pr : products) {
-                System.out.printf("%5d %20s %20s %7.2f %9.2s %20\n",
-                        pr.getProductID(),
-                        pr.getProdName(),
-                        pr.getDescription(),
-                        pr.getPrice(),
-                        pr.getSalePrice()
-                );
+            if (order == PRICE_ORDER) {
+                Collections.sort(products);
+            } //this is the code for the order by name imports the collections class//
+            //note: the creation of an if else to add a comparator. 
+            //the coparator will order the informatoion by price.
+            else if (order == PRICE_ORDER) {
+                //imported comparator from library
+                //calls to method made in productpricecomparator.java
+                Comparator<Product> cmptr = new ProductPriceComparator();
+                Collections.sort(products, cmptr);
             }
+
+            //this is the method for displaying the products below. Note: this is used so as not to repaeat the same code for multiple methods i.e the product by store id method below.
+            displayProducts(products, mdl);
+        }
+    }
+
+    //this method is called for view prtoduct and view product in storeid.
+    //note change tyhe num,bers to change the spacign not the characters//
+    private static void displayProducts(List<Product> products, Model mdl) {
+        System.out.printf("%-15s %-60s %-110s %-12s %-12s %-20s\n", "Product ID", "productName", "description", "price", "salePrice", "Shop");
+        for (Product pr : products) {
+            Shop s = mdl.findShopByStoreID(pr.getStoreID());
+            System.out.printf("%-15d %-60s %-110s %-12.2f %-12.2s %-20s\n",
+                    pr.getProductID(),
+                    pr.getProdName(),
+                    pr.getDescription(),
+                    pr.getPrice(),
+                    pr.getSalePrice(),
+                    //this is to print out a shop name. If there is nothing there, null. It will print an empty string.
+                    (s != null) ? s.getShopName() : "");
         }
     }
     //END VIEW METHOD
-    
+
     //NOTE: THIS IS TO TAKE IN THE USER INPUT FOR PRODUCT DETAILS.//
     private static Product readProduct(Scanner keyb, Model model) {
         String prodName, description;
@@ -227,7 +289,7 @@ public class DepartmentStore {
         salePrice = getDouble(keyb, "Enter Product Sale Price [" + p.getSalePrice() + "]: ", 0);
         //line1 = getString(keyb, "Enter Product Price [" + p.getPrice() + "]:");
         //line2 = getString(keyb, "Enter Product Sale Price [" + p.getSalePrice() + "]:");
-        viewShops(model);
+        //;//viewShops(model);
         storeID = getInt(keyb, "Enter Store ID [" + p.getStoreID() + "]: ", -1);
         //line3 = getString(keyb, "Enter Store ID [" + p.getStoreID() + "]:");
 
@@ -257,6 +319,44 @@ public class DepartmentStore {
         return keyboard.nextLine();
     }
 
+    //METHOD FOR view single PRODUCTS    
+    private static void ViewProduct(Scanner keyboard, Model model) throws DataAccessException {
+        int productID = getInt(keyboard, "Enter the product ID of the product you want to see:    ", -1);
+        Product p;
+
+        p = model.findProductByProductID(productID);
+        if (p != null) {
+            Shop s = model.findShopByStoreID(p.getStoreID());
+            System.out.println("Product:    " + p.getProdName());
+            System.out.println("Description:    " + p.getDescription());
+            System.out.println("Price:  " + p.getPrice());
+            System.out.println("Sale Price: " + p.getSalePrice());
+            System.out.println("Store:  " + ((s != null) ? s.getShopName() : ""));
+
+        } else {
+            System.out.println("Product not found");
+        }
+    }
+    //END view single product METHOD
+
+    //View store names under a product id information
+    private static void StoreProd(Scanner keyboard, Model model) throws DataAccessException {
+        int productID = getInt(keyboard, "Enter a Product ID to see if it is in stock:    ", -1);
+        Product p;
+
+        p = model.findProductByProductID(productID);
+        if (p != null) {
+            Shop s = model.findShopByStoreID(p.getStoreID());
+            System.out.println("Product:    " + p.getProdName());
+            System.out.println("Store:  " + ((s != null) ? s.getShopName() : ""));
+            //System.out.println("Price:    " +((p != null)?  p.getPrice() : ""));
+            //System.out.println("Sale Price:    " +((p != null)?  p.getSalePrice() : ""));
+        } else {
+            System.out.println("Product Not In Stock");
+        }
+    }
+    //End View store names under a product id information//
+
     ///////////////////////////////////////STORE////////////////////////////////////
     //CREATE METHOD//
     private static void createShop(Scanner keyboard, Model model) throws DataAccessException {
@@ -273,12 +373,12 @@ public class DepartmentStore {
     private static Shop readShop(Scanner keyb) {
         String shopName, manFName, manLName;
         int phoneNo;
-        String line;
+        //String line;
 
         shopName = getString(keyb, "Enter Shop Name:   ");
         manFName = getString(keyb, "Enter Manager's First Name:    ");
         manLName = getString(keyb, "Enter Manager's Last Name:    ");
-        phoneNo = getInt(keyb, "Enter Phone Number:    ", -1);
+        phoneNo = getInt(keyb, "Enter Phone Number:    ", 0);
         //line = getString(keyb, "Enter Phone Number:    ");
         //phoneNo = Integer.parseInt(line);
 
@@ -286,16 +386,17 @@ public class DepartmentStore {
     }
 
     //METHOD FOR VIEW PRODUCTS
-    private static void viewShops(Model mdl) {
+    private static void viewShops(Model mdl, int order) {
         List<Shop> shops = mdl.getShops();
 
         if (shops.isEmpty()) {
             System.out.println("There are no stores in the database.");
         } else {
+            Collections.sort(shops);
             //NOTE: THE NUMBERS REPRESENT THE AMOUNT OF CHARACTERS FOR THESE INPUTS//
-            System.out.printf("%6s %20s %20s %20s %9s\n", "storeID", "shopName", "manFName", "manLName", "phoneNo");
+            System.out.printf("%6s %20s %20s %20s %15s\n", "storeID", "shopName", "manFName", "manLName", "phoneNo");
             for (Shop sh : shops) {
-                System.out.printf("%6d %20s %20s %20s %9s \n",
+                System.out.printf("%6d %20s %20s %20s %15s \n",
                         sh.getStoreID(),
                         sh.getShopName(),
                         sh.getManFName(),
@@ -307,10 +408,52 @@ public class DepartmentStore {
     }
     //END VIEW METHOD
 
+    //METHOD FOR EDIT Stores
+    private static void editShop(Scanner kb, Model m) throws DataAccessException {
+        int storeID = getInt(kb, "Enter Store ID to edit:    ", -1);
+        Shop s;
+
+        s = m.findShopByStoreID(storeID);
+        if (s != null) {
+            editShopDetails(kb, m, s);
+            if (m.updateShop(s)) {
+                System.out.println("Store Updated");
+            } else {
+                System.out.println("Store not Updated");
+            }
+        } else {
+            System.out.println("Store not Found");
+        }
+    }
+
+    private static void editShopDetails(Scanner keyb, Model m, Shop s) {
+        String shopName, manFName, manLName;
+        int phoneNo;
+
+        shopName = getString(keyb, "Enter Store Name [" + s.getShopName() + "]:");
+        manFName = getString(keyb, "Enter Manager's First Name [" + s.getManFName() + "]:");
+        manLName = getString(keyb, "Enter Manager's Last Name [" + s.getManLName() + "]:");
+        phoneNo = getInt(keyb, "Enter Phone No [" + s.getPhoneNo() + "]: ", 0);
+
+        if (shopName.length() != 0) {
+            s.setShopName(shopName);
+        }
+        if (manFName.length() != 0) {
+            s.setManFName(manFName);
+        }
+
+        if (manLName.length() != 0) {
+            s.setManLName(manLName);
+        }
+
+        if (phoneNo != s.getPhoneNo()) {
+            s.setPhoneNo(phoneNo);
+        }
+    }
+    //END METHOD FOR EDIT STORE//
+
     //METHOD FOR DELETE STORES    
     private static void deleteShop(Scanner keyboard, Model model) throws DataAccessException {
-        //System.out.print("Enter the store ID of the store to delete:    ");
-        //int storeID = Integer.parseInt(keyboard.nextLine());
         int storeID = getInt(keyboard, "Enter the store ID of the store to delete:    ", -1);
         Shop s;
 
@@ -326,6 +469,33 @@ public class DepartmentStore {
         }
     }
     //END DELETE METHOD
+
+    //View single Store information
+    private static void ViewShop(Scanner keyboard, Model model) throws DataAccessException {
+        int storeID = getInt(keyboard, "Enter the Store ID of the product you want to see:    ", -1);
+        Shop s;
+
+        s = model.findShopByStoreID(storeID);
+        if (s != null) {
+            System.out.println("Shop:    " + s.getShopName());
+            System.out.println("Manager's First Name:    " + s.getManFName());
+            System.out.println("Manager's Last Name:  " + s.getManLName());
+            System.out.println("Phone No: " + s.getPhoneNo());
+
+            //products under a store Id///
+            List<Product> productList = model.getProductsByStoreID(s.getStoreID());
+            if (productList.isEmpty()) {
+                System.out.println("There are no products in Stock.");
+            } else {
+                System.out.println("Products in stock:    ");
+                displayProducts(productList, model);
+            }
+
+        } else {
+            System.out.println("Store not found");
+        }
+    }
+    //view single store information//
 
     //EXCEPTION HANDLING TO PREVENT EXCEPTION ERRORS ON THE INPUT OF DIFFERENT CHARACTERS into Int prompts//
     private static int getInt(Scanner keyb, String prompt, int defaultValue) {
@@ -368,4 +538,5 @@ public class DepartmentStore {
 
         return input;
     }
+
 }

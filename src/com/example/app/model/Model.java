@@ -2,6 +2,7 @@ package com.example.app.model;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -43,6 +44,18 @@ public class Model {
 
     public List<Product> getProducts() {
         return this.products;
+    }
+
+    //this is used to get products by shop id used as an extension of the //
+    public List<Product> getProductsByStoreID(int storeID) {
+
+        List<Product> list = new ArrayList<Product>();
+        for (Product p : this.products) {
+            if (p.getStoreID() == storeID) {
+                list.add(p);
+            }
+        }
+        return list;
     }
 
     //ADD
@@ -108,36 +121,31 @@ public class Model {
         }
         return updated;
     }
-    
-    
+
     //NOTE REMOVE THIS ADD AFTER
-    
-   /*boolean updateProduct (Product p) {
-        boolean updated = false;
-        //note: this is where the id details in the database appear.
-        // the loop is designed to continue retrieving the info until there is nothing then it ends//
-        try {
-            int id = this.productsGateway.insertProduct(p.getProdName(), p.getDescription(), p.getPrice(), p.getSalePrice(), p.getStoreID());
-            if (id != -1) {
-                p.setProductID(id);
-                this.products.add(p);
-                updated = this.productsGateway.updateProduct(p);
-            }
-            } catch (SQLException ex) {
-            throw new DataAccessException("Exception updating Product: " + ex.getMessage());
-        }
-        return updated;
+    /*boolean updateProduct (Product p) {
+     boolean updated = false;
+     //note: this is where the id details in the database appear.
+     // the loop is designed to continue retrieving the info until there is nothing then it ends//
+     try {
+     int id = this.productsGateway.insertProduct(p.getProdName(), p.getDescription(), p.getPrice(), p.getSalePrice(), p.getStoreID());
+     if (id != -1) {
+     p.setProductID(id);
+     this.products.add(p);
+     updated = this.productsGateway.updateProduct(p);
+     }
+     } catch (SQLException ex) {
+     throw new DataAccessException("Exception updating Product: " + ex.getMessage());
+     }
+     return updated;
         
         
-    }*/
-    
-
-
+     }*/
     ////////////////////////////STORE METHODS///////////////////////////////////
     public List<Shop> getShops() {
         return this.shops;
     }
-    
+
     //ADD
     public boolean addShop(Shop s) throws DataAccessException {
         boolean result = false;
@@ -153,7 +161,19 @@ public class Model {
         }
         return result;
     }
-    
+
+    boolean updateShop(Shop s) throws DataAccessException {
+        boolean updated = false;
+
+        try {
+            updated = this.shopsGateway.updateShop(s);
+
+        } catch (SQLException ex) {
+            throw new DataAccessException("Exception updating Shop: " + ex.getMessage());
+        }
+        return updated;
+    }
+
     //REMOVE STORE//
     public boolean removeShop(Shop s) throws DataAccessException {
         boolean removed = false;
@@ -168,9 +188,7 @@ public class Model {
         }
         return removed;
     }
-    
-    
-    
+
     Shop findShopByStoreID(int storeID) {
         Shop s = null;
         int i = 0;

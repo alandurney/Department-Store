@@ -31,12 +31,12 @@ public class ShopTableGateway {
 
         // the required SQL INSERT statement with place holders for the values to be inserted into the database
         query = "INSERT INTO " + TABLE_NAME + " ("
-                + COLUMN_STOREID + ", "
+                //+ COLUMN_STOREID + ", "
                 + COLUMN_SHOPNAME + ", "
                 + COLUMN_MANFNAME + ", "
                 + COLUMN_MANLNAME + ", "
                 + COLUMN_PHONENO
-                + ") VALUES (?, ?, ?, ?, ?)";
+                + ") VALUES (?, ?, ?, ?)";
 
         // create a PreparedStatement object to execute the query and insert the values into the query
         stmt = mConnection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
@@ -77,9 +77,6 @@ public class ShopTableGateway {
         // return the true if one and only one row was deleted from the database
         return (numRowsAffected == 1);
     }
-    
-    
-    
 
     public List<Shop> getShops() throws SQLException {
         String query;                   // the SQL query to execute
@@ -136,13 +133,13 @@ public class ShopTableGateway {
         stmt.setString(1, s.getShopName());
         stmt.setString(2, s.getManFName());
         stmt.setString(3, s.getManLName());
-        stmt.setInt(5, s.getPhoneNo());
-        stmt.setInt(4, s.getStoreID());
+        stmt.setInt(4, s.getPhoneNo());
+        stmt.setInt(5, s.getStoreID());
 
         // execute the query
         numRowsAffected = stmt.executeUpdate();
 
-        // return the true if one and only one row was updated in the database
+        // return true if one and only one row was updated in the database
         return (numRowsAffected == 1);
     }
 
