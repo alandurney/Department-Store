@@ -65,6 +65,7 @@ public class Model {
         // the loop is designed to continue retrieving the info until there is nothing then it ends//
         try {
             int id = this.productsGateway.insertProduct(p.getProdName(), p.getDescription(), p.getPrice(), p.getSalePrice(), p.getStoreID());
+            //sets auto increment id//
             if (id != -1) {
                 p.setProductID(id);
                 this.products.add(p);
