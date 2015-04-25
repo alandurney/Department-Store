@@ -15,7 +15,7 @@ public class ShopTableGateway {
     private static final String TABLE_NAME = "Shop";
     private static final String COLUMN_STOREID = "storeID";
     private static final String COLUMN_SHOPNAME = "shopName";
-    private static final String COLUMN_MANFNAME = "manFNAme";
+    private static final String COLUMN_MANFNAME = "manFName";
     private static final String COLUMN_MANLNAME = "manLName";
     private static final String COLUMN_PHONENO = "phoneNo";
 
